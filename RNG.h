@@ -91,8 +91,7 @@ public:
 			;
 		boost::random_device device(provider);
 		boost::random::uniform_int_distribution<T> random(min, max);
-		auto what = random(device);
-		what = random(device);
+		
 		std::generate(myNumbers.begin(), myNumbers.end(), [&random, &device]()
 		{
 			return random(device);
