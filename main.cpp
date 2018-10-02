@@ -18,10 +18,10 @@ int main(int argc, char** argv)
 		std::cout << i << "\n";
 	}
 
-	/*for (int i& : generator)
+	for (int& i : generator)
 	{
 		std::cout << i << "\n";
-	}*/
+	}
 
 	return 0;
 }
