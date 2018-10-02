@@ -1,7 +1,11 @@
 #pragma once
 #include <numeric>
+#include <algorithm>
 #include <vector>
-#include <array>
+#include <boost/config.hpp>
+#include <boost/random/random_device.hpp>
+#include <boost/random/uniform_int_distribution.hpp>
+#include <boost/random/random_number_generator.hpp>
 
 namespace impl
 {
@@ -78,7 +82,21 @@ public:
 	RNG(int min, int max, int count)
 	{
 		myNumbers.resize(count);
-		std::iota(std::begin(myNumbers), std::end(myNumbers), 0);
+		static const std::string provider =
+#ifdef BOOST_WINDOWS
+			"Microsoft Strong Cryptographic Provider"
+#else
+			"/dev/urandom"
+#endif
+			;
+		boost::random_device device(provider);
+		boost::random::uniform_int_distribution<T> random(min, max);
+		auto what = random(device);
+		what = random(device);
+		std::generate(myNumbers.begin(), myNumbers.end(), [&random, &device]()
+		{
+			return random(device);
+		});
 	}
 
 	using iterator = impl::RngIterator<int>;
